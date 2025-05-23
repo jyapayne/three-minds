@@ -681,6 +681,7 @@ if __name__ == "__main__":
         print(f"Original input was:   '{args.text}'")
 
 
+    print("\n-------------------------------------------------------------")
     print("\nCipher Template Output:")
     print(template_output)
 
