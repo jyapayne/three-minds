@@ -650,7 +650,37 @@ if __name__ == "__main__":
         cipher_steps=generate_cipher_steps(template_cipher_descriptions),
         encoded_text=current_text
     )
+
+    # --- Verify Decoding by Reversing the Steps ---
+    print("\n--- Verifying Decoding ---")
+    text_to_decode = current_text # Start with the final encoded text
+    print(f"Starting with encoded text: '{text_to_decode}'")
+
+    # Iterate through ciphers in reverse order of application for decoding
+    for i, cipher_key in enumerate(selected_ciphers[::-1], 1):
+        cipher_info = ciphers[cipher_key]
+        print(f"\nDecoding Step {i}: Applying {cipher_info['name']} (decode)")
+
+        # Get parameters used during encoding for this cipher
+        # Ensure word_replacement gets its specific 'replacements' dictionary
+        current_cipher_params = cipher_params.get(cipher_key, {})
+
+        try:
+            text_to_decode = decode_text(cipher_key, text_to_decode, **current_cipher_params)
+            print(f"Result after decoding: '{text_to_decode}'")
+        except Exception as e:
+            print(f"Error decoding with {cipher_info['name']}: {e}")
+            print("Halting decoding verification.")
+            break
+
+    print(f"\nFinal decoded text: '{text_to_decode}'")
+    if text_to_decode == args.text:
+        print("(Successfully decoded back to the original text)")
+    else:
+        print("(Note: Final decoded text does not match the original input. Check cipher logic or parameters.)")
+        print(f"Original input was:   '{args.text}'")
+
+
     print("\nCipher Template Output:")
     print(template_output)
-
 
